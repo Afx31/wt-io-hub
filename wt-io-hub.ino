@@ -1,19 +1,32 @@
 #include <SPI.h>
 #include <mcp2515.h>
 
-struct can_frame canMsgEnableDatalogging;
+struct can_frame canMsgDatalogging;
 struct can_frame canMsgChangePage;
+struct can_frame canMsgPlaceholder;
 MCP2515 mcp2515(10);
 
 void setup() {
-    canMsgEnableDatalogging.can_id  = 0x69;
-    canMsgEnableDatalogging.can_dlc = 4;
-    canMsgEnableDatalogging.data[0] = 0x01;
-    canMsgEnableDatalogging.data[1] = 0x01;
-    canMsgEnableDatalogging.data[2] = 0x01;
-    canMsgEnableDatalogging.data[3] = 0x01;
+    /* TODO:
+     * For now we will just send different can messages
+     * Then in near future, we will utilise 1 canMsg,
+     * And use the bytes correctly to house everything
+     */
+    canMsgDatalogging.can_id  = 0x69A;
+    canMsgDatalogging.can_dlc = 4;
+    canMsgDatalogging.data[0] = 0x01;
+    canMsgDatalogging.data[1] = 0x01;
+    canMsgDatalogging.data[2] = 0x01;
+    canMsgDatalogging.data[3] = 0x01;
 
-    canMsgChangePage.can_id  = 0x67;
+    canMsgChangePage.can_id  = 0x69B;
+    canMsgChangePage.can_dlc = 4;
+    canMsgChangePage.data[0] = 0x01;
+    canMsgChangePage.data[1] = 0x01;
+    canMsgChangePage.data[2] = 0x01;
+    canMsgChangePage.data[3] = 0x01;
+
+    canMsgChangePage.can_id  = 0x69C;
     canMsgChangePage.can_dlc = 4;
     canMsgChangePage.data[0] = 0x01;
     canMsgChangePage.data[1] = 0x01;
@@ -47,21 +60,21 @@ void loop() {
     // Btn1
     if (btn3State == HIGH && pinValue3 == LOW) {
         Serial.println("Button Pressed - 1");
-        mcp2515.sendMessage(&canMsgEnableDatalogging);
+        mcp2515.sendMessage(&canMsgDatalogging);
     }
     btn3State = pinValue3;
 
     // Btn2
     if (btn4State == HIGH && pinValue4 == LOW) {
         Serial.println("Button Pressed - 2");
-        //mcp2515.sendMessage(&canMsgEnableDatalogging);
+        mcp2515.sendMessage(&canMsgChangePage);
     }
     btn4State = pinValue4;
 
     // Btn3
     if (btn5State == HIGH && pinValue5 == LOW) {
         Serial.println("Button Pressed - 3");
-        //mcp2515.sendMessage(&canMsgEnableDatalogging);
+        mcp2515.sendMessage(&canMsgPlaceholder);
     }
     btn5State = pinValue5;
 }
